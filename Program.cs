@@ -1,5 +1,6 @@
 ﻿using DataProcessing.Models;
 using DataProcessing.Services;
+using DataProcessing.Services.Config;
 using DataProcessing.Services.Convert;
 using DataProcessing.Services.Validate;
 using DataProcessing.Services.Validate.Interfaces;
@@ -8,13 +9,14 @@ using System.Text.RegularExpressions;
 
 
 
+ConfigurationManager configManager = new();
+string pattern = configManager.GetValue("TransactionPattern");
 
-
-string pattern = "^(?<first_name>[\\w]+),(?<last_name>[\\w]+),[“|\"|\'](?<city>\\w+),(?<street>[\\w]+)(?<building>\\d+),(?<apartment>\\d)[“|\"|'],(?<payment>[\\d.]+),(?<date>\\d{4}-\\d{2}-\\d{2}),(?<account_number>\\d+),(?<service>[\\w]+)$";
+//string pattern = "^(?<first_name>[\\w]+),(?<last_name>[\\w]+),[“|\"|'](?<city>\\w+),(?<street>[\\w]+)(?<building>\\d+),(?<apartment>\\d)[“|\"|'],(?<payment>[\\d.]+),(?<date>\\d{4}-\\d{2}-\\d{2}),(?<account_number>\\d+),(?<service>[\\w]+)$";
 IValidator validator = new Validator(new RegexValidateOption(pattern));
 
 TransactionConverter converter = new TransactionConverter();
-string csvpath = @"E:\WORK\Radency\DataProcessing\DataProcessing\Files\folder_a\data2.csv";
+string csvpath = @"E:\WORK\Radency\DataProcessing\DataProcessing\Files\folder_a\data.csv";
 
 List<Transaction> transactions = new List<Transaction>();
 using (StreamReader sr = new StreamReader(csvpath))
