@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataProcessing.Models
 {
-    internal class Service
+    public class Service
     {
+        public string name { get; set; }
+        public List<Payer> payers { get; set; }
+        public decimal total { get; set; }
     }
 }

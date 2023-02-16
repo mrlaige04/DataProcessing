@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataProcessing.Models
 {
-    internal class Payer
+    public class Payer
     {
+        public string name { get; set; }
+        public decimal payment { get; set; }
+        public DateTime date { get; set; }
+        public long account_number { get; set; }
     }
 }

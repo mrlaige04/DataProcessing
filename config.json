@@ -1,4 +1,4 @@
 {
   "AllowedExtentions": [ ".csv", ".txt" ],
-  "TransactionPattern": "^(?<first_name>[\\w\\s]+),\\s(?<last_name>[\\w\\s]+),\\s“(?<city>\\w+),\\s+(?<street>[\\w\\s]+)\\s+(?<building>\\d+),\\s(?<apartment>\\d)”,\\s(?<payment>[\\d.]+),\\s(?<date>\\d{4}-\\d{2}-\\d{2}),\\s(?<account_number>\\d+),\\s(?<service>[\\w\\s]+)$"
+  "TransactionPattern": 
 }
