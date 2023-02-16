@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Files\" />
+    <Folder Include="Services\FolderManage\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
