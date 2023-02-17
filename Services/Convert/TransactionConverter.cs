@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace DataProcessing.Services.Convert
 {
-    public class TransactionConverter : IConvert<Transaction>
+    public class TransactionConverter : IConvert<Transaction, GroupCollection>
     {
         public Transaction Convert(GroupCollection groups)
         {
