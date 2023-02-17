@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
 using DataProcessing.Services.FileReading.Interfaces;
 using System.Globalization;
 
@@ -7,7 +8,7 @@ namespace DataProcessing.Services.FileReading
 {
     public class CSVReader : IFileReader
     {
-        public async Task<IEnumerable<string>> ReadAsync(string path)
+        public async Task<IEnumerable<string>> ReadAllLinesAsync(string path)
         {
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -20,6 +21,12 @@ namespace DataProcessing.Services.FileReading
                 var records = csv.GetRecords<string>();
                 return records;
             }
+        }
+
+        [Obsolete("This method is not implemented")]
+        public Task<string> ReadToEndAsync(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

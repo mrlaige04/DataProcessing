@@ -2,8 +2,12 @@
 {
     public class Output
     {
-        public string city { get; set; }
-        public List<Service> services { get; set; }
-        public decimal total { get; set; }
+        public List<OutputCity> outputCities { get; set; }
+        public class OutputCity
+        {
+            public string city { get; set; }
+            public List<Service> services { get; set; }
+            public decimal total { get; set; }
+        }
     }
 }

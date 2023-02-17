@@ -13,8 +13,17 @@ namespace DataProcessing.Services.Config
                 .Build();
         }
         public string? GetValue(string key)
-        {
+        { 
             return configuration[key];
+        }
+        
+        public IEnumerable<string?> GetSection(string key)
+        {           
+            var section = configuration.GetSection(key)
+                .AsEnumerable()
+                .Where(x=>x.Value != null)
+                .Select(x=>x.Value);
+            return section;
         }
     }
 }

@@ -2,8 +2,8 @@
 
 namespace DataProcessing.Services.Convert.Interfaces
 {
-    public interface IConvert<T>
+    public interface IConvert<T ,K>
     {
-        T Convert(GroupCollection data);
+        T Convert(K data);
     }
 }
