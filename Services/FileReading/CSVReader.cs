@@ -1,14 +1,14 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
 using DataProcessing.Services.FileReading.Interfaces;
 using System.Globalization;
 
 namespace DataProcessing.Services.FileReading
 {
+    [Obsolete("Use FileReader instead")]
     public class CSVReader : IFileReader
     {
-        public async Task<IEnumerable<string>> ReadAllLinesAsync(string path)
+        public async Task<IEnumerable<string>> ReadAllLinesAsync(string path, CancellationToken token = default)
         {
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -24,7 +24,7 @@ namespace DataProcessing.Services.FileReading
         }
 
         [Obsolete("This method is not implemented")]
-        public Task<string> ReadToEndAsync(string path)
+        public Task<string> ReadToEndAsync(string path, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }

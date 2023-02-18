@@ -1,5 +1,4 @@
 ﻿using DataProcessing.Services.Validate.Interfaces;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace DataProcessing.Services.Validate
@@ -16,7 +15,7 @@ namespace DataProcessing.Services.Validate
         {
             var str = input.Replace(" ", "").Trim('"').Replace("\"\"", "\"");
             var match = regex.Match(str);
-            
+
             return new RegexValidationResult()
             {
                 IsValid = match.Success,
