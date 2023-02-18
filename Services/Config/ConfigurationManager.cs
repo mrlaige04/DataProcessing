@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 
 namespace DataProcessing.Services.Config
 {
@@ -13,16 +12,16 @@ namespace DataProcessing.Services.Config
                 .Build();
         }
         public string? GetValue(string key)
-        { 
+        {
             return configuration[key];
         }
-        
+
         public IEnumerable<string?> GetSection(string key)
-        {           
+        {
             var section = configuration.GetSection(key)
                 .AsEnumerable()
-                .Where(x=>x.Value != null)
-                .Select(x=>x.Value);
+                .Where(x => x.Value != null)
+                .Select(x => x.Value);
             return section;
         }
     }

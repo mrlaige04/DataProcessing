@@ -1,13 +1,14 @@
 ﻿using DataProcessing.Models.Logging.Abstract;
+using System.Text.Json;
 
 namespace DataProcessing.Models.Logging
 {
     public class MetaLogData : ILogData, IDisposable
     {
-        private int parsed_files { get; set; }
-        private int parsed_lines { get; set; }
-        private int found_errors { get; set; }
-        private IEnumerable<string> invalid_files { get; set; }
+        public int parsed_files { get; set; }
+        public int parsed_lines { get; set; }
+        public int found_errors { get; set; }
+        public IList<string> invalid_files { get; set; }
 
         public MetaLogData()
         {
@@ -16,10 +17,10 @@ namespace DataProcessing.Models.Logging
 
         public override string ToString()
         {
-            return "Parsed files: " + parsed_files + 
-                "\nParsed lines: " + parsed_lines + 
-                "\nFound errors: " + found_errors + 
-                "\nInvalid files: " + invalid_files;
+            return "Parsed files: " + parsed_files +
+                "\nParsed lines: " + parsed_lines +
+                "\nFound errors: " + found_errors +
+                "\nInvalid files: " + JsonSerializer.Serialize(invalid_files);
         }
 
         public void Dispose()
@@ -27,7 +28,7 @@ namespace DataProcessing.Models.Logging
             parsed_files = 0;
             parsed_lines = 0;
             found_errors = 0;
-            invalid_files = null!;
+            invalid_files.Clear();
         }
     }
 }

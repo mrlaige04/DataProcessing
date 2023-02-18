@@ -1,9 +1,7 @@
-﻿using System.Text.RegularExpressions;
-
-namespace DataProcessing.Services.Convert.Interfaces
+﻿namespace DataProcessing.Services.Convert.Interfaces
 {
-    public interface IConvert<T ,K>
+    public interface IConvert<T, K>
     {
-        T Convert(K data);
+        T Convert(K data, CancellationToken token = default);
     }
 }

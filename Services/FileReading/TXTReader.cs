@@ -5,7 +5,7 @@ namespace DataProcessing.Services.FileReading
     [Obsolete("Use FileReader instead")]
     public class TXTReader : IFileReader
     {
-        public async Task<IEnumerable<string>> ReadAllLinesAsync(string path)
+        public async Task<IEnumerable<string>> ReadAllLinesAsync(string path, CancellationToken token = default)
         {
             using (StreamReader sr = new StreamReader(path))
             {
@@ -15,7 +15,7 @@ namespace DataProcessing.Services.FileReading
         }
 
         [Obsolete("This method is not implemented")]
-        public Task<string> ReadToEndAsync(string path)
+        public Task<string> ReadToEndAsync(string path, CancellationToken token = default)
         {
             throw new NotImplementedException();
         }

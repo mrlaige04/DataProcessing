@@ -19,7 +19,7 @@ namespace DataProcessing.Services.FolderCheck
 
             foreach (var extFilter in extentionsFilder)
             {
-                _watcher.Filters.Add(extFilter);
+                _watcher.Filters.Add("*" + extFilter);
             }
         }
 
@@ -34,16 +34,16 @@ namespace DataProcessing.Services.FolderCheck
             return files;
         }
 
-        
+
 
         private void FileCreated(object sender, FileSystemEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        
 
-        public void EnableWatcher(FileSystemEventHandler handler)
+
+        public void EnableWatcher(FileSystemEventHandler handler, CancellationToken token)
         {
             _watcher.Created += handler;
             _watcher.EnableRaisingEvents = true;

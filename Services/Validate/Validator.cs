@@ -8,7 +8,7 @@ namespace DataProcessing.Services.Validate
         public Validator(IValidationOption _option)
         {
             option = _option;
-        }         
+        }
 
         public IValidationResult Validate(string input)
         {

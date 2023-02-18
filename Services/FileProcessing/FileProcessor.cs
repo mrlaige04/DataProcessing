@@ -23,23 +23,41 @@ namespace DataProcessing.Services.FileProcessing
             _validator = new Validator(validationOption);
             _file_output_converter = new OutputConverter();
             _transaction_regex_converter = new TransactionConverter();
-        } 
-        
-        public async Task<Output> ProcessFileAsync(string filePath, MetaLogData metaData)
+        }
+
+        public async Task<Output> ProcessFileAsync(string filePath, MetaLogData metaData, CancellationToken token = default)
         {
+            bool isFileInvalid = false;
             List<Transaction> transactions = new List<Transaction>();
-            var lines = await _fileReader.ReadAllLinesAsync(filePath);
-            File.Delete(filePath);
-            Parallel.ForEach(lines, x =>
+            var lines = await _fileReader.ReadAllLinesAsync(filePath, token);
+
+            // TODO: WHEN CANCELLATION REQUESTED IT`S THROWING AN EXCEPTION (Task was canceled), maybe should use try catch :)
+            Parallel.ForEach(lines, new ParallelOptions() { CancellationToken = token }, x =>
             {
                 var result = _validator.Validate(x) as RegexValidationResult;
+
                 if (result != null && result.IsValid)
                 {
+                    metaData.parsed_lines++;
                     var transaction = _transaction_regex_converter.Convert(result.Groups);
                     transactions.Add(transaction);
                 }
-            });                      
-            return _file_output_converter.Convert(transactions);
+                else
+                {
+                    metaData.found_errors++;
+                    isFileInvalid = true;
+                }
+            });
+
+            
+            
+            metaData.parsed_files++;
+            if (isFileInvalid)
+            {
+                metaData.invalid_files.Add(filePath);
+            }
+            File.Delete(filePath);
+            return _file_output_converter.Convert(transactions, token);
         }
-    }    
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using DataProcessing.Models;
 using DataProcessing.Services.Convert.Interfaces;
-using DataProcessing.Services.Validate.Interfaces;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -8,7 +7,7 @@ namespace DataProcessing.Services.Convert
 {
     public class TransactionConverter : IConvert<Transaction, GroupCollection>
     {
-        public Transaction Convert(GroupCollection groups)
+        public Transaction Convert(GroupCollection groups, CancellationToken token = default)
         {
             string[] validformats = new[] { "MM/dd/yyyy", "yyyy/MM/dd", "MM/dd/yyyy", "MM/dd/yyyy", "yyyy-dd-MM", "yyyy-MM-dd" };
             Transaction trans = new Transaction();

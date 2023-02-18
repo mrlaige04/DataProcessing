@@ -367,3 +367,6 @@ Files/folder_a/*
 
 #ignore all files in folder_b
 Files/folder_b/*
+
+#test files
+Files/test/*

@@ -5,5 +5,5 @@
         public ConfigException(string message) : base(message)
         {
         }
-    }   
+    }
 }
