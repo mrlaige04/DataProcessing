@@ -150,14 +150,11 @@ namespace DataProcessing.Services.AppManagement
         #endregion
 
 
-
-        // TODO : FIX BUG: METALOG FILE MAY CREATE NOT AT 00:00, IT CAN CREATE MUCH EARLIER(smth with scheduler)
-
         public async Task DoAtMidnight()
         {
             await Stop();
 
-            await metaLogger.LogToFile(metaData, Path.Combine(fullDestinationFolder, "meta.log"));
+            metaLogger.LogToFile(metaData, Path.Combine(fullDestinationFolder, "meta.log"));
             metaData.Dispose();
             CreateTodayFolderIfNotExists();
             counter = 0;
@@ -222,7 +219,29 @@ namespace DataProcessing.Services.AppManagement
             });
         }
 
+        public static async Task WaitForUnlock(FileInfo file)
+        {
+            while (IsFileLocked(file))
+            {
+                await Task.Delay(10);
+            }
+        }
+        public static bool IsFileLocked(FileInfo file)
+        {
+            try
+            {
+                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                return true;
+            }
 
+            return false;
+        }
         // To get current counter for the day and increment it
         private int IncrementCounter()
         {
