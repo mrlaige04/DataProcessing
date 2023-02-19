@@ -1,5 +1,6 @@
 ﻿using DataProcessing.Models;
 using DataProcessing.Models.Logging;
+using DataProcessing.Services.AppManagement;
 using DataProcessing.Services.Convert;
 using DataProcessing.Services.Convert.Interfaces;
 using DataProcessing.Services.FileProcessing.Interfaces;
@@ -7,6 +8,7 @@ using DataProcessing.Services.FileReading;
 using DataProcessing.Services.FileReading.Interfaces;
 using DataProcessing.Services.Validate;
 using DataProcessing.Services.Validate.Interfaces;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace DataProcessing.Services.FileProcessing
@@ -29,25 +31,31 @@ namespace DataProcessing.Services.FileProcessing
         {
             bool isFileInvalid = false;
             List<Transaction> transactions = new List<Transaction>();
+
+            await AppManager.WaitForUnlock(new FileInfo(filePath));
+
             var lines = await _fileReader.ReadAllLinesAsync(filePath, token);
 
-            // TODO: WHEN CANCELLATION REQUESTED IT`S THROWING AN EXCEPTION (Task was canceled), maybe should use try catch :)
-            Parallel.ForEach(lines, new ParallelOptions() { CancellationToken = token }, x =>
+            try
             {
-                var result = _validator.Validate(x) as RegexValidationResult;
+                Parallel.ForEach(lines, new ParallelOptions() { CancellationToken = token }, x =>
+                {
+                    var result = _validator.Validate(x) as RegexValidationResult;
 
-                if (result != null && result.IsValid)
-                {
-                    metaData.parsed_lines++;
-                    var transaction = _transaction_regex_converter.Convert(result.Groups);
-                    transactions.Add(transaction);
-                }
-                else
-                {
-                    metaData.found_errors++;
-                    isFileInvalid = true;
-                }
-            });
+                    if (result != null && result.IsValid)
+                    {
+                        metaData.parsed_lines++;
+                        var transaction = _transaction_regex_converter.Convert(result.Groups);
+                        transactions.Add(transaction);
+                    }
+                    else
+                    {
+                        metaData.found_errors++;
+                        isFileInvalid = true;
+                    }
+                });
+            } catch { Debug.WriteLine("Error"); }
+            
 
             
             
@@ -56,6 +64,7 @@ namespace DataProcessing.Services.FileProcessing
             {
                 metaData.invalid_files.Add(filePath);
             }
+            await AppManager.WaitForUnlock(new FileInfo(filePath));
             File.Delete(filePath);
             return _file_output_converter.Convert(transactions, token);
         }
